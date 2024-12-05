@@ -93,26 +93,25 @@ $estado = isset($_GET['estado']) ? $_GET['estado'] : 'Venta';
                         </div>
 
                         <!-- Filtro Rango de Precio -->
-                        <div class="filtro">
-                            <div class="select-btn">
-                                <span class="btn-text">Precio</span>
-                                <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
-                            </div>
-                            <div class="list-items">
-                                <div class="item">
-                                    <input type="number" name="precio_min" id="precio_min" placeholder="Precio mínimo"
-                                        value="<?php echo isset($_GET['precio_min']) ? htmlspecialchars($_GET['precio_min']) : ''; ?>"
-                                        min="0" step="0.01">
-                                </div>
-                                <div class="item">
-                                    <input type="number" name="precio_max" id="precio_max" placeholder="Precio máximo"
-                                        value="<?php echo isset($_GET['precio_max']) ? htmlspecialchars($_GET['precio_max']) : ''; ?>"
-                                        min="0" step="0.01">
-                                </div>
-                                <div id="error-message" class="error-message"></div>
-                                <button type="submit" onclick="return validarPrecio()">Aplicar filtro</button>
-                            </div>
-                        </div>
+ <!-- Filtro Rango de Precio -->
+<div class="filtro">
+    <div class="select-btn">
+        <span class="btn-text">Precio</span>
+        <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
+    </div>
+    <div class="list-items">
+        <div class="item">
+            <input type="number" name="precio_min" id="precio_min" placeholder="Precio mínimo" value="" min="0" step="0.01">
+        </div>
+        <div class="item">
+            <input type="number" name="precio_max" id="precio_max" placeholder="Precio máximo" value="" min="0" step="0.01">
+        </div>
+        <div id="error-message" class="error-message"></div>
+        <button type="submit" onclick="return validarPrecio()">Aplicar filtro</button>
+    </div>
+</div>
+
+
                     </div>
 
                     <input class="btn-buscar-filtro" type="submit" value="Buscar" name="buscar">
@@ -129,6 +128,40 @@ $estado = isset($_GET['estado']) ? $_GET['estado'] : 'Venta';
         function convertirAMinusculas(input) {
             input.value = input.value.toLowerCase();
         }
+
+
+function actualizarFiltro() {
+
+    document.querySelectorAll('.filtro').forEach(function (filtro) {
+        const selectBtn = filtro.querySelector('.select-btn');
+        const selectedItems = filtro.querySelectorAll('.checkbox:checked');
+
+
+        let selectedText = '';
+        selectedItems.forEach(function (item) {
+            selectedText += item.nextElementSibling.textContent + ', ';
+        });
+
+
+        if (selectedText) {
+            selectedText = selectedText.slice(0, -2); 
+        } else {
+            selectedText = selectBtn.getAttribute('data-value');
+        }
+
+        selectBtn.querySelector('.btn-text').textContent = selectedText;
+    });
+}
+
+document.querySelectorAll('.checkbox').forEach(function (checkbox) {
+    checkbox.addEventListener('change', actualizarFiltro);
+});
+
+document.querySelectorAll('.select-btn').forEach(function (btn) {
+    btn.setAttribute('data-value', btn.querySelector('.btn-text').textContent);
+});
+
+
     </script>
 </body>
 
